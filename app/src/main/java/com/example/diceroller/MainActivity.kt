@@ -34,10 +34,37 @@ fun DiceRollerApp() {
     DiceWithButtonAndImage()
 }
 @Composable
-fun DiceWithButtonAndImage(modifier: Modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center)) {
-    var result by remember { mutableStateOf(1) }
+fun DiceWithButtonAndImage(modifier: Modifier = Modifier
+    .fillMaxSize()
+    .wrapContentSize(Alignment.Center)) {
+    var diceOne by remember { mutableStateOf(1) }
+    var diceTwo by remember { mutableStateOf(1) }
 
-    val imageResource = when(result) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Mar Serrano Galvan")
+        Image(
+            painter = painterResource(id = behavior(diceOne)),
+            contentDescription = diceOne.toString()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Image(
+            painter = painterResource(id = behavior(diceTwo)),
+            contentDescription = diceTwo.toString()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {diceOne = (1..6).random()
+            diceTwo = (1..6).random()}) {
+            Text(stringResource(R.string.roll))
+        }
+    }
+}
+
+fun behavior (value : Int):Int{
+    val imageResource = when(value) {
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
         3 -> R.drawable.dice_3
@@ -46,19 +73,7 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier.fillMaxSize().wrapConte
         else -> R.drawable.dice_6
 
     }
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = imageResource), contentDescription = result.toString()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {result = (1..6).random()}) {
-            Text(stringResource(R.string.roll))
-        }
-    }
+    return imageResource
 }
 
 
